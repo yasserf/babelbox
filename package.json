@@ -1,0 +1,29 @@
+{
+  "name": "babelbox",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yasserf/babelbox.git"
+  },
+  "keywords": [
+    "i18n",
+    "internationalisation"
+  ],
+  "author": "Yasser Fadl",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yasserf/babelbox/issues"
+  },
+  "homepage": "https://github.com/yasserf/babelbox#readme",
+  "devDependencies": {
+    "jasmine-core": "^2.3.4",
+    "karma": "^0.12.36",
+    "karma-chrome-launcher": "^0.1.12",
+    "karma-jasmine": "^0.2.2"
+  }
+}

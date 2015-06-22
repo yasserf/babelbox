@@ -1,0 +1,21 @@
+{
+  "name": "babelbox",
+  "version": "0.0.0",
+  "homepage": "https://github.com/yasserf/babelbox",
+  "authors": [
+    "Yasser Fadl <yasser.fadl@gmail.com>"
+  ],
+  "description": "Simple i18n library",
+  "keywords": [
+    "i18n",
+    "internationalisation"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
