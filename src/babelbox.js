@@ -48,7 +48,7 @@
 	};
 
 	babelbox.prototype.setLocale = function( locale ) {
-		writeCookie( this.config.COOKIE_NAME, locale );
+		writeCookie( this.config.COOKIE_NAME, locale.join( '-' ) );
 		this.locale = locale;
 	};
 
