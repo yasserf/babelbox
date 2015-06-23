@@ -1,8 +1,9 @@
 describe( "replacing tokens in a blob", function() {
 
-	var i18n;
+	var i18n = babelbox;
+
 	beforeEach( function() {
-		i18n = new babelbox();
+		babelbox.reset();
 		i18n.addTokens( {
 			name: 'Name',
 			age: 'Age',

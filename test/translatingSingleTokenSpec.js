@@ -1,8 +1,10 @@
 describe( "adding tokens", function() {
 
-	var i18n;
+	var i18n = babelbox;
+
+	
 	beforeEach( function() {
-		i18n = new babelbox();
+		i18n.reset();
 		i18n.addTokens( {
 			confirmed: 'It\'s confirmed!',
 			please_confirm: 'Please confirm your booking',
