@@ -1,7 +1,9 @@
-( function( root, factory ) {
-	var babelbox = new( factory() );
+( function( root, babelbox ) {
+	console.log( babelbox )
 	if( typeof define === 'function' && define.amd ) {
-		define( babelbox );
+		define( function() {
+			return babelbox;
+		} );
 	} else if( typeof exports === 'object' ) {
 		module.exports = babelbox;
 	} else {
@@ -18,79 +20,84 @@
 		SPLIT_CHAR: '.',
 		COOKIE_NAME: 'babelbox-locale',
 		URL_PARAM: 'locale'
-	}
-
-	function babelbox() {
-		this.emitter = null;
-		this.reset();
-	}
-
-	babelbox.prototype.setConfig = function( config ) {
-		var mergedConfig;
-		for( var key in defaultConfig ) {
-			mergedConfig[ key ] = config[ key ] || defaultConfig[ key ];
-		}
-		this.config = mergedConfig;
 	};
 
-	babelbox.prototype.setEmitter = function( emitter ) {
-		this.emitter = emitter;
-	};
+	var config = defaultConfig;
+	var tokenStore = {};
+	var locale;
+	var emitter = null;
 
-	babelbox.prototype.reset = function() {
-		this.config = defaultConfig;
-		this.locale = this.getLocale();
-		this.tokens = {};
-		this.emitter = null;
-	};
-
-	babelbox.prototype.getLocale = function() {
-		var locale = readUrl( this.config.URL_PARAM );
-		locale = locale ? locale : readCookie( this.config.COOKIE_NAME );
-		locale = locale ? locale : window.navigator.userLanguage || window.navigator.language;
-		return locale.split( '-' );
-	};
-
-	babelbox.prototype.setLocale = function( locale ) {
-		writeCookie( this.config.COOKIE_NAME, locale.join( '-' ) );
-		this.locale = locale;
-	};
-
-	babelbox.prototype.addTokens = function( tokens ) {
-		this._setTokenValues( tokens, false );
-	};
-
-	babelbox.prototype.addExtendedTokens = function( tokens ) {
-		this._setTokenValues( tokens, true );
-	};
-
-	babelbox.prototype.blob = function( text ) {
-		var message;
-		var matches = text.match( /(\[\[[^\]]+\]\])/g );
-		for( var i = 0; i < matches.length; i++ ) {
-			message = this._getTokenValue( matches[ i ].substring( 2, matches[ i ].length - 2 ) );
-			text = text.replace( matches[ i ], message );
-		}
-		return text;
-	};
-
-	babelbox.prototype.translate = function( token, mappings ) {
-		var translateToken = this._getTokenValue( token, this.tokens, this.config.SPLIT_CHAR );
+	function BabelBox( token, mappings ) {
+		var translateToken = getTokenValue( token );
 		if( translateToken != null ) {
 			for( var key in mappings ) {
 				translateToken = translateToken.replace( "[[" + key + "]]", mappings[ key ] );
 			}
 		}
 		return translateToken;
+	}
+
+	BabelBox.setConfig = function( config ) {
+		var mergedConfig;
+		for( var key in defaultConfig ) {
+			mergedConfig[ key ] = config[ key ] || defaultConfig[ key ];
+		}
+		config = mergedConfig;
 	};
 
-	babelbox.prototype._getTokenValue = function( token ) {
-		return getObjectCrawl( token.split( this.config.SPLIT_CHAR ), null, this.tokens, 0 );
+	BabelBox.setEmitter = function( emitr ) {
+		emitter = emitr;
 	};
 
-	babelbox.prototype._setTokenValues = function( tokens, overwrite ) {
+	BabelBox.reset = function() {
+		config = defaultConfig;
+		locale = BabelBox.getLocale();
+		tokenStore = {};
+		emitter = null;
+	};
+
+	BabelBox.getLocale = function() {
+		var locale = readUrl( config.URL_PARAM );
+		locale = locale ? locale : readCookie( config.COOKIE_NAME );
+		locale = locale ? locale : window.navigator.userLanguage || window.navigator.language;
+		return locale.split( '-' );
+	};
+
+	BabelBox.setLocale = function( newLocale ) {
+		writeCookie( config.COOKIE_NAME, newLocale.join( '-' ) );
+		locale = newLocale;
+	};
+
+	BabelBox.getTokens = function() {
+		return tokenStore;
+	};
+
+	BabelBox.addTokens = function( tokens ) {
+		setTokenValues( tokens, false );
+	};
+
+	BabelBox.addExtendedTokens = function( tokens ) {
+		setTokenValues( tokens, true );
+	};
+
+	BabelBox.blob = function( text ) {
+		var message;
+		var matches = text.match( /(\[\[[^\]]+\]\])/g );
+		for( var i = 0; i < matches.length; i++ ) {
+			message = getTokenValue( matches[ i ].substring( 2, matches[ i ].length - 2 ) );
+			text = text.replace( matches[ i ], message );
+		}
+		return text;
+	};
+
+
+	function getTokenValue( token ) {
+		return getObjectCrawl( token.split( config.SPLIT_CHAR ), null, tokenStore, 0 );
+	};
+
+	function setTokenValues( tokens, overwrite ) {
 		for( var token in tokens ) {
-			setObjectCrawl( token.split( this.config.SPLIT_CHAR ), tokens[ token ], this.tokens, 0, overwrite, this.emitter, this.config.SPLIT_CHAR );
+			setObjectCrawl( token.split( config.SPLIT_CHAR ), tokens[ token ], tokenStore, 0, overwrite, emitter, config.SPLIT_CHAR );
 		}
 	};
 
@@ -115,7 +122,12 @@
 					throw new Error( 'Duplicate token attempted to be added: "' + parts.join( SPLIT_CHAR ) + '"' );
 				}
 			}
-			tokens[ part ] = translation;
+			if( typeof translation !== 'string' ) {
+				tokens[ part ] = deepmerge( tokenStore[ part ] || {}, translation, overwrite, parts.join( SPLIT_CHAR ) );
+			} else {
+				tokens[ part ] = translation;
+			}
+
 		}
 	};
 
@@ -132,6 +144,32 @@
 			return translation || null;
 		}
 	};
+
+	function deepmerge( target, src, overwrite, prefix ) {
+		var token;
+		var dst = {};
+		prefix = prefix ? prefix + '.' : '';
+		for( var key in target ) {
+			dst[ key ] = target[ key ];
+		}
+		for( var key in src ) {
+			token = prefix + key;
+			if( !overwrite && typeof src[ key ] === 'string' && typeof target[ key ] === 'string' ) {
+				if( emitter ) {
+					emitter.emit( EVENTS.DUPLICATE_TOKEN, token );
+				} else {
+					throw new Error( "Duplicate token attempted to be added: '" + token + "'" );
+				}
+			} else if( typeof src[ key ] !== 'object' || !src[ key ] ) {
+				dst[ key ] = src[ key ];
+			} else if( ( overwrite && typeof src[ key ] === 'string' ) || !target[ key ] ) {
+				dst[ key ] = src[ key ];
+			} else {
+				dst[ key ] = deepmerge( target[ key ], src[ key ], overwrite, emitter, token );
+			}
+		}
+		return dst;
+	}
 
 	function readCookie( key ) {
 		var result;
@@ -151,5 +189,5 @@
 		return result;
 	};
 
-	return babelbox;
-} ) );
+	return BabelBox;
+}() ) );

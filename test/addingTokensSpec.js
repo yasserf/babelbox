@@ -12,7 +12,7 @@ describe( "adding tokens", function() {
 			"potato": "value"
 		};
 		i18n.addTokens( tokens );
-		expect( i18n.tokens ).toEqual( tokens );
+		expect( i18n.getTokens() ).toEqual( tokens );
 	} );
 
 	it( "can add with multiple depths", function() {
@@ -20,7 +20,7 @@ describe( "adding tokens", function() {
 			"countries.asia.japan": "japan",
 			"countries.asia.china": "china"
 		} );
-		expect( i18n.tokens ).toEqual( {
+		expect( i18n.getTokens() ).toEqual( {
 			tomato: 'value',
 			potato: 'value',
 			countries: {
@@ -38,7 +38,7 @@ describe( "adding tokens", function() {
 			"countries.asia.thailand": "thailand",
 			"cucumber": "cucumber"
 		} );
-		expect( i18n.tokens ).toEqual( {
+		expect( i18n.getTokens() ).toEqual( {
 			tomato: 'value',
 			potato: 'value',
 			cucumber: 'cucumber',
@@ -57,7 +57,7 @@ describe( "adding tokens", function() {
 		i18n.addExtendedTokens( {
 			"countries.asia.japan": "an tSeapáin"
 		} );
-		expect( i18n.tokens ).toEqual( {
+		expect( i18n.getTokens() ).toEqual( {
 			tomato: 'value',
 			potato: 'value',
 			cucumber: 'cucumber',
@@ -71,6 +71,56 @@ describe( "adding tokens", function() {
 			}
 		} );
 	} );
+
+	it( "can add tokens in a nested form", function() {
+		i18n.addExtendedTokens( {
+			"countries": {
+				"asia": {
+					"malaysia": "malaysia"
+				}
+			}
+		} );
+		expect( i18n.getTokens() ).toEqual( {
+			tomato: 'value',
+			potato: 'value',
+			cucumber: 'cucumber',
+			countries: {
+				asia: {
+					japan: 'an tSeapáin',
+					china: 'china',
+					singapore: 'singapore',
+					thailand: 'thailand',
+					malaysia: "malaysia"
+				}
+			}
+		} );
+	} );
+
+	it( "can add tokens in a combi form", function() {
+		i18n.addExtendedTokens( {
+			"countries.africa": {
+				"egypt": "egypt"
+			}
+		} );
+		expect( i18n.getTokens() ).toEqual( {
+			tomato: 'value',
+			potato: 'value',
+			cucumber: 'cucumber',
+			countries: {
+				asia: {
+					japan: 'an tSeapáin',
+					china: 'china',
+					singapore: 'singapore',
+					thailand: 'thailand',
+					malaysia: "malaysia"
+				},
+				"africa": {
+					"egypt": "egypt"
+				}
+			}
+		} );
+	} );
+
 
 	it( "throws an error when trying to set an already existing token", function() {
 		expect( i18n.addTokens.bind( i18n, {
