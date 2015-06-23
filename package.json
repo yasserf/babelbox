@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "karma start karma.conf.js",
+    "test": "./node_modules/.bin/karma start --single-run --browsers Chrome,Firefox",
+    "watch": "karma start karma.conf.js"
   },
   "repository": {
     "type": "git",
@@ -26,5 +26,8 @@
     "karma": "^0.12.36",
     "karma-chrome-launcher": "^0.1.12",
     "karma-jasmine": "^0.2.2"
+  },
+  "dependencies": {
+    "karma-firefox-launcher": "^0.1.6"
   }
 }
