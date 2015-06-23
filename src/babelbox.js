@@ -10,7 +10,8 @@
 }( this, function() {
 
 	var EVENTS = {
-		DUPLICATE_TOKEN: 'DUPLICATE_TOKEN'
+		DUPLICATE_TOKEN: 'DUPLICATE_TOKEN',
+		NAMESPACE_ALSO_VALUE: 'NAMESPACE_ALSO_VALUE'
 	};
 
 	var defaultConfig = {
@@ -25,7 +26,11 @@
 	}
 
 	babelbox.prototype.setConfig = function( config ) {
-		this.config = deepmerge( this.config, config, true );
+		var mergedConfig;
+		for( var key in defaultConfig ) {
+			mergedConfig[ key ] = config[ key ] || defaultConfig[ key ];
+		}
+		this.config = mergedConfig;
 	};
 
 	babelbox.prototype.setEmitter = function( emitter ) {
@@ -40,8 +45,8 @@
 	};
 
 	babelbox.prototype.getLocale = function() {
-		var locale = readUrl( this.config.URL_PARAM );
-		locale = locale ? locale : readCookie( this.config.COOKIE_NAME );
+		var locale = this._readUrl( this.config.URL_PARAM );
+		locale = locale ? locale : this._readCookie( this.config.COOKIE_NAME );
 		locale = locale ? locale : window.navigator.userLanguage || window.navigator.language;
 
 		return locale.split( '-' );
@@ -53,25 +58,25 @@
 	};
 
 	babelbox.prototype.addTokens = function( tokens ) {
-		this.tokens = deepmerge( this.tokens, tokens, false, this.emitter );
+		this._setTokenValues( tokens, false );
 	};
 
 	babelbox.prototype.addExtendedTokens = function( tokens ) {
-		this.tokens = deepmerge( this.tokens, tokens, true );
+		this._setTokenValues( tokens, true );
 	};
 
 	babelbox.prototype.blob = function( text ) {
 		var message;
 		var matches = text.match( /(\[\[[^\]]+\]\])/g );
 		for( var i = 0; i < matches.length; i++ ) {
-			message = getTokenValue( matches[ i ].substring( 2, matches[ i ].length - 2 ), this.tokens );
+			message = this._getTokenValue( matches[ i ].substring( 2, matches[ i ].length - 2 ) );
 			text = text.replace( matches[ i ], message );
 		}
 		return text;
 	};
 
 	babelbox.prototype.translate = function( token, mappings ) {
-		var translateToken = getTokenValue( token, this.tokens, this.config.SPLIT_CHAR );
+		var translateToken = this._getTokenValue( token, this.tokens, this.config.SPLIT_CHAR );
 		if( translateToken != null ) {
 			for( var key in mappings ) {
 				translateToken = translateToken.replace( "[[" + key + "]]", mappings[ key ] );
@@ -80,66 +85,72 @@
 		return translateToken;
 	};
 
-	function getTokenValue( token, tokens, splitChar ) {
-		return objectCrawl( token.split( splitChar ), tokens, "", 0 );
-	}
+	babelbox.prototype._getTokenValue = function( token ) {
+		return this._getObjectCrawl( token.split( this.config.SPLIT_CHAR ), null, this.tokens, 0 );
+	};
 
-	function objectCrawl( parts, tokens, translation, iteration ) {
+	babelbox.prototype._setTokenValues = function( tokens, overwrite ) {
+		for( var token in tokens ) {
+			this._setObjectCrawl( token.split( this.config.SPLIT_CHAR ), tokens[ token ], this.tokens, 0, overwrite );
+		}
+	};
+
+	babelbox.prototype._setObjectCrawl = function( parts, translation, tokens, iteration, overwrite ) {
+		var part = parts[ iteration ];
+		if( iteration < parts.length - 1 ) {
+			if( !tokens[ part ] ) {
+				tokens[ part ] = {};
+			} else if( typeof tokens[ part ] === 'string' ) {
+				if( this.emitter ) {
+					this.emitter.emit( EVENTS.NAMESPACE_ALSO_VALUE, token );
+				} else {
+					throw new Error( 'Token is already declared as a value: "' + token + '"' );
+				}
+			}
+			return this._setObjectCrawl( parts, translation, tokens[ part ], iteration + 1, overwrite );
+		} else {
+			if( tokens[ part ] && !overwrite ) {
+				if( this.emitter ) {
+					this.emitter.emit( EVENTS.DUPLICATE_TOKEN, parts.join( this.config.SPLIT_CHAR ) );
+				} else {
+					throw new Error( 'Duplicate token attempted to be added: "' + parts.join( this.config.SPLIT_CHAR ) + '"' );
+				}
+			}
+			tokens[ part ] = translation;
+		}
+	};
+
+	babelbox.prototype._getObjectCrawl = function( parts, translation, tokens, iteration ) {
 		var lastpart = parts[ parts.length - 1 ];
 		var part = parts[ iteration ];
+
 		if( tokens[ lastpart ] ) {
 			translation = tokens[ lastpart ]
 		}
 		if( iteration < parts.length - 1 && tokens[ part ] ) {
-			return objectCrawl( parts, tokens[ part ], translation, iteration + 1 );
+			return this._getObjectCrawl( parts, translation, tokens[ part ], iteration + 1 );
 		} else {
 			return translation || null;
 		}
-	}
+	};
 
-	function deepmerge( target, src, overwrite, emitter, prefix ) {
-		var token;
-		var dst = {};
-		prefix = prefix ? prefix + '.' : '';
-		for( var key in target ) {
-			dst[ key ] = target[ key ];
-		}
-		for( var key in src ) {
-			token = prefix + key;
-			if( !overwrite && typeof src[ key ] === 'string' && typeof target[ key ] === 'string' ) {
-				if( emitter ) {
-					emitter.emit( EVENTS.DUPLICATE_TOKEN, token );
-				} else {
-					throw new Error( "Duplicate token attempted to be added: '" + token + "'" );
-				}
-			} else if( typeof src[ key ] !== 'object' || !src[ key ] ) {
-				dst[ key ] = src[ key ];
-			} else if( ( overwrite && typeof src[ key ] === 'string' ) || !target[ key ] ) {
-				dst[ key ] = src[ key ];
-			} else {
-				dst[ key ] = deepmerge( target[ key ], src[ key ], overwrite, emitter, token );
-			}
-		}
-		return dst;
-	}
-
-	function readCookie( key ) {
+	babelbox.prototype._readCookie = function( key ) {
 		var result;
 		return( result = new RegExp( '(?:^|; )' + encodeURIComponent( key ) + '=([^;]*)' ).exec( document.cookie ) ) ? ( result[ 1 ] ) : null;
-	}
+	};
 
-	function writeCookie( key, locale ) {
+	babelbox.prototype._writeCookie = function( key, locale ) {
 		document.cookie = key + "=" + locale + "; path=/";
-	}
+	};
 
-	function readUrl( key ) {
+	babelbox.prototype._readUrl = function( key ) {
 		var result = null;
 		if( window.location.href ) {
 			result = new RegExp( '[?&]?' + key + '=([^&]*)' ).exec( window.location.href );
 			result = result ? result[ 1 ] : null;
 		}
 		return result;
-	}
+	};
 
 	return babelbox;
 } ) );

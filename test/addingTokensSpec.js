@@ -17,12 +17,8 @@ describe( "adding tokens", function() {
 
 	it( "can add with multiple depths", function() {
 		i18n.addTokens( {
-			"countries": {
-				"asia": {
-					"japan": "japan",
-					"china": "china"
-				}
-			}
+			"countries.asia.japan": "japan",
+			"countries.asia.china": "china"
 		} );
 		expect( i18n.tokens ).toEqual( {
 			tomato: 'value',
@@ -38,12 +34,8 @@ describe( "adding tokens", function() {
 
 	it( "can merge tokens", function() {
 		i18n.addTokens( {
-			"countries": {
-				"asia": {
-					"singapore": "singapore",
-					"thailand": "thailand"
-				}
-			},
+			"countries.asia.singapore": "singapore",
+			"countries.asia.thailand": "thailand",
 			"cucumber": "cucumber"
 		} );
 		expect( i18n.tokens ).toEqual( {
@@ -63,11 +55,7 @@ describe( "adding tokens", function() {
 
 	it( "overwrites tokens when adding language extensions", function() {
 		i18n.addExtendedTokens( {
-			"countries": {
-				"asia": {
-					"japan": "an tSeapáin",
-				}
-			}
+			"countries.asia.japan": "an tSeapáin"
 		} );
 		expect( i18n.tokens ).toEqual( {
 			tomato: 'value',
@@ -86,12 +74,8 @@ describe( "adding tokens", function() {
 
 	it( "throws an error when trying to set an already existing token", function() {
 		expect( i18n.addTokens.bind( i18n, {
-			"countries": {
-				"asia": {
-					"singapore": "singapore"
-				}
-			}
-		} ) ).toThrow( new Error( 'Duplicate token attempted to be added: \'countries.asia.singapore\'' ) );
+			"countries.asia.singapore": "singapore"
+		} ) ).toThrow( new Error( 'Duplicate token attempted to be added: \"countries.asia.singapore\"' ) );
 	} );
 
 	describe( 'when an emitter is set', function() {
@@ -107,11 +91,7 @@ describe( "adding tokens", function() {
 
 		it( "emits an error event if emitter is set", function() {
 			i18n.addTokens( {
-				"countries": {
-					"asia": {
-						"singapore": "singapore"
-					}
-				}
+				"countries.asia.singapore": "singapore"
 			} );
 			expect( emitter.emit ).toHaveBeenCalled();
 			expect( emitter.emit ).toHaveBeenCalledWith( 'DUPLICATE_TOKEN', 'countries.asia.singapore' );

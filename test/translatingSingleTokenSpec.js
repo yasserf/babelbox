@@ -1,4 +1,4 @@
-describe( "adding tokens", function() {
+describe( "translating single tokens", function() {
 
 	var i18n = babelbox;
 
