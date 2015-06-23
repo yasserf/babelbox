@@ -62,7 +62,7 @@
 
 	babelbox.prototype.blob = function( text ) {
 		var message;
-		var matches = text.match( /({{[^}]+}})/g );
+		var matches = text.match( /(\[\[[^\]]+\]\])/g );
 		for( var i = 0; i < matches.length; i++ ) {
 			message = getTokenValue( matches[ i ].substring( 2, matches[ i ].length - 2 ), this.tokens );
 			text = text.replace( matches[ i ], message );
@@ -74,7 +74,7 @@
 		var translateToken = getTokenValue( token, this.tokens, this.config.SPLIT_CHAR );
 		if( translateToken != null ) {
 			for( var key in mappings ) {
-				translateToken = translateToken.replace( "{{" + key + "}}", mappings[ key ] );
+				translateToken = translateToken.replace( "[[" + key + "]]", mappings[ key ] );
 			}
 		}
 		return translateToken;

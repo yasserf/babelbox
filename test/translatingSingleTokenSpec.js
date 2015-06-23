@@ -2,17 +2,17 @@ describe( "adding tokens", function() {
 
 	var i18n = babelbox;
 
-	
+
 	beforeEach( function() {
 		i18n.reset();
 		i18n.addTokens( {
 			confirmed: 'It\'s confirmed!',
 			please_confirm: 'Please confirm your booking',
 			booking: {
-				confirmed: 'Your booking no:{{booking_no}} on {{day}} was succesfully confirmed!',
+				confirmed: 'Your booking no:[[booking_no]] on [[day]] was succesfully confirmed!',
 				to_confirm: 'Your booking will be confirmed shortly!',
 				hotel: {
-					confirmed: 'Your hotel booking at {{hotel}} is confirmed!',
+					confirmed: 'Your hotel booking at [[hotel]] is confirmed!',
 					to_confirm: 'Your hotel booking will be confirmed shortly!',
 				}
 			}
