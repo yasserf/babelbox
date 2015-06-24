@@ -1,5 +1,4 @@
 ( function( root, babelbox ) {
-	console.log( babelbox )
 	if( typeof define === 'function' && define.amd ) {
 		define( function() {
 			return babelbox;
@@ -80,7 +79,7 @@
 		setTokenValues( tokens, true );
 	};
 
-	BabelBox.blob = function( text ) {
+	BabelBox.translate = function( text ) {
 		var message;
 		var matches = text.match( /(\[\[[^\]]+\]\])/g );
 		for( var i = 0; i < matches.length; i++ ) {
