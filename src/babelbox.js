@@ -28,7 +28,7 @@
 
 	function BabelBox( token, mappings ) {
 		var translateToken = getTokenValue( token );
-		if( translateToken != null ) {
+		if( translateToken !== null ) {
 			for( var key in mappings ) {
 				translateToken = translateToken.replace( "[[" + key + "]]", mappings[ key ] );
 			}
@@ -82,6 +82,10 @@
 	BabelBox.translate = function( text ) {
 		var message;
 		var matches = text.match( /(\[\[[^\]]+\]\])/g );
+		if( matches === null ) {
+			return text;
+		}
+
 		for( var i = 0; i < matches.length; i++ ) {
 			message = getTokenValue( matches[ i ].substring( 2, matches[ i ].length - 2 ) );
 			text = text.replace( matches[ i ], message );
@@ -92,13 +96,13 @@
 
 	function getTokenValue( token ) {
 		return getObjectCrawl( token.split( config.SPLIT_CHAR ), null, tokenStore, 0 );
-	};
+	}
 
 	function setTokenValues( tokens, overwrite ) {
 		for( var token in tokens ) {
 			setObjectCrawl( token.split( config.SPLIT_CHAR ), tokens[ token ], tokenStore, 0, overwrite, emitter, config.SPLIT_CHAR );
 		}
-	};
+	}
 
 	function setObjectCrawl( parts, translation, tokens, iteration, overwrite, emitter, SPLIT_CHAR ) {
 		var part = parts[ iteration ];
@@ -128,30 +132,31 @@
 			}
 
 		}
-	};
+	}
 
 	function getObjectCrawl( parts, translation, tokens, iteration ) {
 		var lastpart = parts[ parts.length - 1 ];
 		var part = parts[ iteration ];
 
 		if( tokens[ lastpart ] ) {
-			translation = tokens[ lastpart ]
+			translation = tokens[ lastpart ];
 		}
 		if( iteration < parts.length - 1 && tokens[ part ] ) {
 			return getObjectCrawl( parts, translation, tokens[ part ], iteration + 1 );
 		} else {
 			return translation || null;
 		}
-	};
+	}
 
 	function deepmerge( target, src, overwrite, prefix ) {
 		var token;
 		var dst = {};
+		var key;
 		prefix = prefix ? prefix + '.' : '';
-		for( var key in target ) {
+		for( key in target ) {
 			dst[ key ] = target[ key ];
 		}
-		for( var key in src ) {
+		for( key in src ) {
 			token = prefix + key;
 			if( !overwrite && typeof src[ key ] === 'string' && typeof target[ key ] === 'string' ) {
 				if( emitter ) {
@@ -173,11 +178,11 @@
 	function readCookie( key ) {
 		var result;
 		return( result = new RegExp( '(?:^|; )' + encodeURIComponent( key ) + '=([^;]*)' ).exec( document.cookie ) ) ? ( result[ 1 ] ) : null;
-	};
+	}
 
 	function writeCookie( key, locale ) {
 		document.cookie = key + "=" + locale + "; path=/";
-	};
+	}
 
 	function readUrl( key ) {
 		var result = null;
@@ -186,7 +191,7 @@
 			result = result ? result[ 1 ] : null;
 		}
 		return result;
-	};
+	}
 
 	return BabelBox;
 }() ) );
