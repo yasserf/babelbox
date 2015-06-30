@@ -19,4 +19,7 @@ describe( "translating text", function() {
 		expect( i18n.translate( '[[name]]:Bob\n[[age]]:42\n[[dateofbirth]]:21/02/1984' ) ).toEqual( 'Name:Bob\nAge:42\nDate Of Birth:21/02/1984' );
 	} );
 
+	it( "returns the original text if no tokens are found", function() {
+		expect( i18n.translate( 'Does not contain tokens' ) ).toEqual( 'Does not contain tokens' );
+	} );
 } );
