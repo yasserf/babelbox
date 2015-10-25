@@ -1,13 +1,10 @@
 language: node_js
 node_js:
-  - "0.10"
+  - "stable"
 
-script: karma start karma.conf-ci.js
-
-env:
-  global:
-    - secure: 61Iihq3OEOk0y7OZtcdL3iBzcVD6c536RAVZzV7Q+antbaY0Uk5VNlGahs0AUzCQM9HGJURRVOmRt5HeirauAblKVnSwI1kPt7wf4QwZdJn2RACg/+ACO5x13jl4jDVgP7VjHsMuV0L9XXx//M4Mu1wCsS/tKdU200TXQVDrytCTtIzdBMlkxcSwvPKnz2E9uQWM4uGqEqzEIO4KHrIsH8X/2yOEB1ICSg9nAv1c3ABtvqn9xxU0wLOU0zCvY24jE5jHw8K5W5Cv0bMwxEh9P6CMeusEiXb5FScfCVt/AnPHUdFYrPPvDQLnIVBZ5KFxk+JIw7BUn8+qo6uiZ597S8xf53beF/w6KRx03Xx7q8TnIIiLuUUAbopvAKT2MxZxeFRZLi7Ud997bamL3rqyRkT/YyaJiIcaGn0RcOAnEtPSqiHyXd2cGpBucqQ/hU2IHL7/rWl55XwNG16OugAf6oL6J1kgc/pzLejvuUiQvuJGSTzPc4FSPfm2v0mL0WCk+ZhWWEaQEzOylRymHBeCW8tgunu1H+rUXXvCTpicczGq6+ZMlJhQgVNzL7cfHwwOUDgoZfBf28EbpyLypTPq6IAeEYFbPRc8+oY4l3n4AgMvMEgaFPKs/dDq9yxH99LM+zJ/Ifur4W0N0uGkq049W2ddgRxE6WRHNIT3qPUTAz0=
-    - secure: Hs/MYczCXsgomo04RzZ9QXryVlb94RBC5g+oKFvpU5/l25ebETNWrgdAFJIrgQ7rZSVx9SJa+mJ4Ogydwf99R0hOERrWOq3+YR8kquW+n9Dm0hLSbPqZ1/7IEupg4T+IbG1P1KJKWWwBX5x+Qo7SzCUiy57DEB/bQm5piIE8IWwFNf5+laZud3/MeDD2l9RrGCupDrmPCr3+UeEQz5TCKCPRp9J17bNRvbDXyTCNMoFSNQzxtHKe7JE4/dmqwZsME2h7qicLPpVsbjqRJUyjj8O4ZRADTxRcCVZWKkN0YfjSkmdeBHGGEl5bG30oxVzaJx+V30omdGsPGT+A3HXuJDg4GOWGnjwNqvjFStzUBtv0J6l9Ljd5roiq1S5NFeunGk7JpjTp45TzNKpZIOO6LTtFCerM+OPxCsDiWxm0/TkhVnt/jPH/rWxI7E2rR0ykYejjcPyEie7CBo9UUMVKL57uNQcNoWScK7ZD4l29lWGYBf+VyrAp/2fafslI1x83zfJfqHdpt5VbqO6Gg3wDiHi86wtsmRnvbbvXeyV579kmRjDIltAD7xCfeWi+cyDRCKQJ1NacEVAFDUZVvEAEcaeo3yE/AtskAXdJxUgCGngHO0yDG0cP0SAfgJh63jYfZUowPZkEVEjp0Kma33530uE5Ztud7dCX4m61Ore38MI=
-
-addons:
-  sauce_connect: true
+script: karma start karma.conf.js --single-run
+before_install:
+    - export DISPLAY=:99.0
+    - sh -e /etc/init.d/xvfb start
+before_script:
+	- npm install
