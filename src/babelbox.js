@@ -1,3 +1,16 @@
+/*global define, define.amd */
+
+/**
+ * BabelBox is a tiny i18n library that allows multiple different languages to be used inside of a web application.
+ * It's main features are:
+ * 1) Determining what language is used via a url token, cookie or browser locale.
+ * 2) Allowing tokens to be added dynamically through the application lifetime.
+ * 3) Using token paths to provide token trees, which provides cascading translations.
+ * 4) Translating text to use for client side templating
+ *
+ * @param token
+ * @param mappings
+ */
 ( function( root, babelbox ) {
 	if( typeof define === 'function' && define.amd ) {
 		define( function() {
@@ -23,9 +36,29 @@
 
 	var config = defaultConfig;
 	var tokenStore = {};
-	var locale;
+    var locale = null;
 	var emitter = null;
 
+    /**
+     * Used to translate tokens.
+     * For example,
+     *
+     * Given you provided a translation
+     *
+     * { booking.confirmation: 'Booking [[id]] confirmed!' }
+     *
+     * And you call
+     *
+     * BabelBox( 'booking.confirmation', { id: 12345 } )
+     *
+     * The result will be
+     *
+     * Booking 12345 confirmed!
+     *
+     * @param {string} token The token to translate
+     * @param {object} mappings The set values to interpolate
+     * @returns
+     */
 	function BabelBox( token, mappings ) {
 		var translateToken = getTokenValue( token );
 		if( translateToken !== null ) {
@@ -36,18 +69,37 @@
 		return translateToken;
 	}
 
-	BabelBox.setConfig = function( config ) {
-		var mergedConfig;
+    /**
+     * Allows you to override default configuration settings.
+     * You can configure:
+     * SPLIT_CHAR to change how token paths are parsed
+     * COOKIE_NAME to change what cookie to use to store the locale
+     * URL_PARAM to change what url parameter to use to select a locale
+     * @param {{SPLIT_CHAR: string, COOKIE_NAME: string, URL_PARAM: string}} overrideConfig
+     */
+	BabelBox.setConfig = function( overrideConfig ) {
+		var mergedConfig= {};
 		for( var key in defaultConfig ) {
-			mergedConfig[ key ] = config[ key ] || defaultConfig[ key ];
+			mergedConfig[ key ] = overrideConfig[ key ] || defaultConfig[ key ];
 		}
 		config = mergedConfig;
 	};
 
-	BabelBox.setEmitter = function( emitr ) {
+    /**
+     * Allows you to set an emitter in order to capture errors thrown.
+     * An Emitter requires the same API as the node emitter ( although only emit function is used! )
+     * @param {Object} emitr
+     */
+    BabelBox.setEmitter = function( emitr ) {
+        if( typeof emitr.emit !== 'function' ) {
+            throw new Error( 'Emitter requires an emit function in order to be used' );
+        }
 		emitter = emitr;
 	};
 
+    /**
+     * Resets babelbox to it's initial state
+     */
 	BabelBox.reset = function() {
 		config = defaultConfig;
 		locale = BabelBox.getLocale();
@@ -55,6 +107,11 @@
 		emitter = null;
 	};
 
+    /**
+     * Returns the locale to be used
+     *
+     * @returns {Array} An array of locales, allowing sub regions
+     */
 	BabelBox.getLocale = function() {
 		var locale = readUrl( config.URL_PARAM );
 		locale = locale ? locale : readCookie( config.COOKIE_NAME );
@@ -62,23 +119,79 @@
 		return locale.split( '-' );
 	};
 
+    /**
+     * Set the locale to use, which will be contained within cookie for future references
+     *
+     * @returns {Array} An array of locales, allowing sub regions
+     */
 	BabelBox.setLocale = function( newLocale ) {
 		writeCookie( config.COOKIE_NAME, newLocale.join( '-' ) );
 		locale = newLocale;
 	};
 
+    /**
+     * Return all tokens
+     * @returns {{}}
+     */
 	BabelBox.getTokens = function() {
 		return tokenStore;
 	};
 
+    /**
+     * Add tokens dynamically to allow new phrases to be added. Phrases that already exist will not
+     * be overriden and instead throw an error. This is useful to avoid having duplicated tokens in codebase.
+     * @returns {{}}
+     */
 	BabelBox.addTokens = function( tokens ) {
 		setTokenValues( tokens, false );
 	};
 
+    /**
+     * Add tokens dynamically to allow new phrases to be added. Phrases that already exist will be overriden.
+     * This is useful to avoid errors being thrown, but in async conditions can cause problems depending on load order.
+     * @returns {{}}
+     */
 	BabelBox.addExtendedTokens = function( tokens ) {
 		setTokenValues( tokens, true );
 	};
 
+    /**
+     * Translate tokens within a large blob of text. This is useful when loading in html/xml files and
+     * translating them on the client side.
+     *
+     * For example:
+     *
+     * Given you provided a translation map
+     *
+     * {
+     *  "colors": {
+     *      "yellow": "gelb",
+     *      "red": "rot",
+     *      "blue": "blau"
+     *  }
+     * }
+     *
+     * And a string template:
+     *  <ul>
+     *      <li>[[colors.yellow]]</li>
+     *      <li>[[colors.red]]</li>
+     *      <li>[[colors.blue]]</li>
+     *  <ul>
+     *
+     * And you call:
+     * BabelBox.translate( template )
+     *
+     * The result will be
+     *
+     *  <ul>
+     *      <li>gelb</li>
+     *      <li>rot</li>
+     *      <li>blau</li>
+     *  <ul>
+     *
+     * @param text
+     * @returns {*}
+     */
 	BabelBox.translate = function( text ) {
 		var message;
 		var matches = text.match( /(\[\[[^\]]+\]\])/g );
@@ -92,7 +205,6 @@
 		}
 		return text;
 	};
-
 
 	function getTokenValue( token ) {
 		return getObjectCrawl( token.split( config.SPLIT_CHAR ), null, tokenStore, 0 );
@@ -162,7 +274,7 @@
 				if( emitter ) {
 					emitter.emit( EVENTS.DUPLICATE_TOKEN, token );
 				} else {
-					throw new Error( "Duplicate token attempted to be added: '" + token + "'" );
+					throw new Error( 'Duplicate token attempted to be added: "' + token + '"' );
 				}
 			} else if( typeof src[ key ] !== 'object' || !src[ key ] ) {
 				dst[ key ] = src[ key ];

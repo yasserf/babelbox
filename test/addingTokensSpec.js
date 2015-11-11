@@ -135,10 +135,6 @@ describe( "adding tokens", function() {
 			i18n.setEmitter( emitter );
 		} );
 
-		afterEach( function() {
-			i18n.setEmitter( null );
-		} );
-
 		it( "emits an error event if emitter is set", function() {
 			i18n.addTokens( {
 				"countries.asia.singapore": "singapore"
