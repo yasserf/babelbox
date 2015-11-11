@@ -113,10 +113,18 @@
      * @returns {Array} An array of locales, allowing sub regions
      */
 	BabelBox.getLocale = function() {
-		var locale = readUrl( config.URL_PARAM );
-		locale = locale ? locale : readCookie( config.COOKIE_NAME );
-		locale = locale ? locale : window.navigator.userLanguage || window.navigator.language;
-		return locale.split( '-' );
+		if( isNode() ) {
+			if( locale ) {
+				return locale;
+			} else {
+				throw new Error( 'Provide a locale using setLocale' );
+			}
+		} else {
+			var locale = readUrl( config.URL_PARAM );
+			locale = locale ? locale : readCookie( config.COOKIE_NAME );
+			locale = locale ? locale : window.navigator.userLanguage || window.navigator.language;
+			return locale.split( '-' );
+		}	
 	};
 
     /**
@@ -304,6 +312,10 @@
 		}
 		return result;
 	}
+
+	function isNode() {
+		return typeof process !== 'undefined' && process.toString() === '[object process]';
+	};
 
 	return BabelBox;
 }() ) );
