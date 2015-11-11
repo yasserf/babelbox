@@ -1,7 +1,13 @@
 describe( "adding tokens", function() {
 
-	var i18n = babelbox;
-
+	var i18n;
+	if( typeof require !== 'undefined' ) {
+		i18n = require( '../src/babelbox' );
+	} else {
+		i18n = babelbox;
+	}
+	i18n.setLocale( [ 'en' ] );
+	
 	it( "resets babelbox", function() {
 		i18n.reset();
 	} );

@@ -120,10 +120,10 @@
 				throw new Error( 'Provide a locale using setLocale' );
 			}
 		} else {
-			var locale = readUrl( config.URL_PARAM );
-			locale = locale ? locale : readCookie( config.COOKIE_NAME );
-			locale = locale ? locale : window.navigator.userLanguage || window.navigator.language;
-			return locale.split( '-' );
+			var newLocale = readUrl( config.URL_PARAM );
+			newLocale = newLocale ? newLocale : readCookie( config.COOKIE_NAME );
+			newLocale = newLocale ? newLocale : window.navigator.userLanguage || window.navigator.language;
+			return newLocale.split( '-' );
 		}	
 	};
 
@@ -133,7 +133,9 @@
      * @returns {Array} An array of locales, allowing sub regions
      */
 	BabelBox.setLocale = function( newLocale ) {
-		writeCookie( config.COOKIE_NAME, newLocale.join( '-' ) );
+		if( !isNode() ) {
+			writeCookie( config.COOKIE_NAME, newLocale.join( '-' ) );
+		}
 		locale = newLocale;
 	};
 
