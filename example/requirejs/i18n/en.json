@@ -1,0 +1,20 @@
+{
+	"language": {
+		"current": "Your current selected locale is: [[language]]",
+		"select_another_language": "Select another language (requires refresh)",
+		"english": "english",
+		"british": "shakespearean",
+		"german": "german"
+	},
+	"submit" : "Submit",
+	"form" : {
+		"what_pets_you_own": "What pets do you own?",
+		"what_is_your_name" : "What is your name?",
+		"how_old_are_you" : "How old are you?"
+	},
+	"form.pets" : {
+		"dog": "Dog",
+		"cat": "Cat",
+		"parrot": "Parrot"
+	}
+}

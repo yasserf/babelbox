@@ -1,0 +1,11 @@
+{
+	"language": {
+		"current": "thy current selecteth'd locale is: [[language]]",
+		"german": "g'rman"
+	},
+	"form" : {
+		"what_pets_you_own": "what pets doeth thou owneth?",
+		"what_is_your_name" : "what is thy nameth?",
+		"how_old_are_you" : "how corky art thou?"
+	}
+}

@@ -2,7 +2,7 @@
   "name": "babelbox",
   "version": "0.0.2",
   "description": "",
-  "main": "index.js",
+  "main": "src/babelbox.js",
   "scripts": {
     "test": "./node_modules/.bin/karma start",
     "watch": "karma start karma.conf.js"

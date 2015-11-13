@@ -1,0 +1,33 @@
+<form submit="submit-form">
+	
+	<div class="form-group">
+		<label for="name">[[form.what_is_your_name]]</label>
+		<input class="form-control" id="name">
+	</div>
+
+	<div class="form-group">
+		<label for="age">[[form.how_old_are_you]]</label>
+		<input class="form-control" id="age">
+	</div>
+
+	<div class="form-group">
+		<div>[[form.what_pets_you_own]]</div>
+		<div class="checkbox">
+			<label>
+				<input type="checkbox" name="pet" value="dog">[[form.pets.dog]]
+			</label>
+		</div>
+  		<div class="checkbox">
+  			<label>
+  				<input type="checkbox" name="pet" value="cat">[[form.pets.cat]]
+  			</label>
+  		</div>
+  		<div class="checkbox">
+  			<label>
+  				<input type="checkbox" name="pet" value="parrot">[[form.pets.parrot]]
+  			</label>
+  		</div>
+	</div>
+
+  	<button type="submit" class="btn btn-default">[[form.submit]]</button>
+</form>

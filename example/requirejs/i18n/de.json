@@ -1,0 +1,20 @@
+{
+    "language": {
+        "current": "Ihre aktuelle ausgewählte Gebietsschema ist: [[language]]",
+        "select_another_language": "Wählen Sie eine andere Sprache (erfordert aktualisieren)",
+        "english": "Englisch",
+        "british": "Britische",
+        "german": "Deutsch"
+    },
+    "submit": "Senden",
+    "form": {
+        "what_pets_you_own": "Was Haustiere besitzen Sie?",
+        "what_is_your_name": "Wie heißen Sie?",
+        "how_old_are_you": "Wie alt sind Sie?",
+        "pets": {
+            "dog": "Hund",
+            "cat": "Katze",
+            "parrot": "Papagei"
+        }
+    }
+}
