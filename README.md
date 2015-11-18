@@ -1,7 +1,7 @@
-# babelbox ![Build](https://travis-ci.org/hoxton-one/babelbox.svg?branch=master)
+# babelbox ![Build](https://travis-ci.org/hoxton-one/babelbox.svg?branch=master)[![Bower version](https://badge.fury.io/bo/babelbox.svg)](https://badge.fury.io/bo/babelbox)
 =======================
 
-Babelbox is a small i18n library that allows users to easily create apps that support multiple languages.
+babelbox is a small i18n library that allows users to easily create apps that support multiple languages.
 
 Featuring:
 * Language Detection
