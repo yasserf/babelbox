@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="en"><head>
+	<meta charset="UTF-8">
+	<title>BabelBox | minimal i18n</title>
+
+	<meta name="description" content="A small i18n library that allows users to easily create apps that support multiple languages.">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="http://fonts.googleapis.com/css?family=Quicksand:300,400,700" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="assets/css/babelbox.css">
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.8.0/styles/github.min.css">
+
+</head>
+<body>
+
+	<div class="header-wrapper">
+		<div class="header-back">
+			<div class="header-svg"></div>	
+		</div>
+	</div>
+	<h1 class="bb-headline"> BabelBox.js </h1>
+	<h2 class="bb-subheading"> minimal i18n </h2>
+
+	<div class="intro-wrapper">
+		<div class="lip-shadow"></div>	
+		<div class="section intro">
+			<div class="two-columns">
+				<div class="column">
+					<h2 class="main-desc">
+						Babelbox is a small internationalisation library that makes it easy to support multiple languages.
+					</h2>
+					<div class="action-buttons">
+						<a href="https://github.com/hoxton-one/babelbox" class="button-github">View on GitHub</a>
+						<a href="http://bower.io/search/?q=babelbox" class="button-bower">Bower Install</a>
+					</div>
+					<ul>
+						<li><span>Language Detection<br>Automatically detects and stores languages and locales.</span></li>
+						<li><span>Asynchronous Translations<br> Load translations at runtime</span></li>
+						<li><span>Tiny &amp; Standalone<br>Less than 2k with zero dependencies</span></li>
+					</ul>
+				</div>
+				<div class="column">
+					<pre class="main-code-snippet"><code class="lang-javascript"><span class="hljs-built_in">require</span>( <span class="hljs-string">'babelbox!../i18n'</span> );
+i18n = <span class="hljs-built_in">require</span>( <span class="hljs-string">'i18n'</span> );
+
+translateTemplate = i18n.translate( template );</code></pre>
+
+					<p class="description">
+						Created to work in harmony with requirejs and allows async modules to be loaded with their respective language files, without having to manually load or manipulate tokens.
+						<br><br>
+						Due to how complicated/large applications nowadays can get, it also allows all components to live in their own namespaces without having to duplicate generic translations.
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="main-content-wrapper">
+
+		<div class="main-content">
+		
+<!-- 		<ul id="doc-nav">
+			{{#each headings}}
+			  {{#if isH3 }}
+			  	<li class="context head">
+			  		{{text}}
+			  	</li>
+			  {{else}}
+			  <li class="sub-context">
+			  	<a href="#{{id}}">{{text}}</a>
+			  </li>
+			  {{/if}}
+			{{/each}}
+		</ul>	 -->
+
+		<ul id="doc-nav">
+			  	<li class="context head">
+			  		Installation
+			  	</li>
+			  <li class="sub-context">
+			  	<a href="#">Bower</a>
+			  </li>
+			  <li class="sub-context">
+			  	<a href="#">Standalone</a>
+			  </li>
+			  	<li class="context head">
+			  		Language
+			  	</li>
+			  <li class="sub-context">
+			  	<a href="#i18n.getLocale()">Getting locale</a>
+			  </li>
+			  <li class="sub-context">
+			  	<a href="#i18n.setLocale(locale)">Setting Locale</a>
+			  </li>
+			  	<li class="context head">
+			  		Adding tokens
+			  	</li>
+			  <li class="sub-context">
+			  	<a href="#requirejs-plugin">Using the requirejs plugin</a>
+			  </li>
+			  <li class="sub-context">
+			  	<a href="#i18n.addTokens(tokens)">Adding new tokens</a>
+			  </li>
+			  <li class="sub-context">
+			  	<a href="#i18n.addExtendedTokens(tokens)">Override existing tokens</a>
+			  </li>
+			  	<li class="context head">
+			  		Translation
+			  	</li>
+			  <li class="sub-context">
+			  	<a href="#i18n(path)">Translating paths</a>
+			  </li>
+			  <li class="sub-context">
+			  	<a href="#i18n(path, object)">Interpolation</a>
+			  </li>
+			  <li class="sub-context">
+			  	<a href="#i18n.translate(text)">Translating Text</a>
+			  </li>
+			  <li class="sub-context">
+			  	<a href="#">Translation Trees</a>
+			  </li>
+			  	<li class="context head">
+			  		Error Handling
+			  	</li>
+			  <li class="sub-context">
+			  	<a href="#emitter.setEmitter(emitter)">Setting an emitter</a>
+			  </li>
+			  <li class="sub-context">
+			  	<a href="#emitter.on('DUPLICATE_TOKEN',callback)">When token already exists</a>
+			  </li>
+			  <li class="sub-context">
+			  	<a href="#emitter.on('NAMESPACE_ALSO_VALUE',callback)">When tree conflicts occur</a>
+			  </li>
+			  	<li class="context head">
+			  		Config
+			  	</li>
+			  <li class="sub-context">
+			  	<a href="#requirejs-config">Configuring requirejs plugin</a>
+			  </li>
+			  <li class="sub-context">
+			  	<a href="#i18n.setConfig(config)">Configuring BabelBox</a>
+			  </li>
+		</ul>	
+
+		<div class="docs">
+		<h3 class="header main-header">Installation</h3>
+
+		<h4 class="header sub-header">Bower</h4>
+		<p>
+			Download BabelBox above or install it using <a href="http://bower.io/">bower</a>. If you're using <a href="http://requirejs.org/">requirejs</a>, don't forget to install BabelBox-requirejs as well!
+		</p>
+
+		<pre><code class="lang-bash">$  bower install --save babelbox babelbox-requirejs</code></pre>
+
+		<h4 class="header sub-header">Standalone</h4>
+		<p>
+			For simpler projects, you can include BabelBox as a script and access it via the global <b>babelbox</b>
+		</p>
+		
+		<h3 class="header main-header">Language</h3>
+
+		<p>
+			An i18n library's main function is to translate an application into different languages. BabelBox makes this easy by automatically detecting the language you want to use, and storing your preference for future sessions.
+			<br>
+			<br>
+			Language detecting 
+			It figures it out by first looking at your url for a language token. If one isn't present it then tries to load your last visit preference.
+			If it's your first time it will default to the browser locale.
+			<br>
+			<br>
+			Since dialect variations are supported we store the locale in an array. See <a href="http://www.w3.org/TR/ltli/">W3 Spec</a> for details.
+		</p>
+
+		<h4 class="header sub-header" id="i18n.getLocale()">Getting locale</h4>
+
+		<pre><code class="lang-javascript">i18n.getLocale();
+&gt; [ <span class="hljs-string">"en"</span>, <span class="hljs-string">"GB"</span> ]</code></pre>
+
+		<h4 class="header sub-header" id="i18n.setLocale(locale)">Setting Locale</h4>
+		<p>
+		Setting the locale updates the cookie for future sessions
+		</p>
+
+		<pre><code class="lang-javascript">i18n.setLocale( [ <span class="hljs-string">"en"</span>, <span class="hljs-string">"GB"</span> ] );</code></pre>
+
+		<p>
+		
+		</p>
+
+		<h3 class="header main-header">Adding tokens</h3>
+		
+		<h4 class="header sub-header" id="requirejs-plugin">Using the requirejs plugin</h4>
+
+		<p>
+		You can use the requirejs plugin to load the correct language files on your behalf. It works by first loading the current language file and then loading the dialect variations.
+		<br><br>
+		For example, if your language is de-DE-goethe, it will load the files in the following order:
+		<br>
+		de.json, de-DE.json, de-DE-goethe.json
+		<br>
+		<br>
+		All you need to do is point the requirejs plugin to a folder containing i18n json files.
+		</p>
+
+	<pre><code class="lang-javascript"><span class="hljs-built_in">require</span>( <span class="hljs-string">"BabelBox!../i18n"</span> );</code></pre>
+
+		<h4 class="header sub-header" id="i18n.addTokens(tokens)">Adding new tokens</h4>
+
+		<p>
+			This is the safest way to programatically add tokens since it notifies you if they already exist to avoid clashes.
+		</p>
+		<pre><code class="lang-javascript">i18n.addTokens( {
+	<span class="hljs-string">"confirmed"</span>: <span class="hljs-string">"It's confirmed!"</span>,
+	<span class="hljs-string">"please_confirm"</span>: <span class="hljs-string">"Please confirm"</span>,
+	<span class="hljs-string">"booking"</span>: {
+		<span class="hljs-string">"confirmed"</span>: <span class="hljs-string">"Your booking no:[[booking_number]] on [[day]] was successfully confirmed!"</span>,
+		<span class="hljs-string">"to_confirm"</span>: <span class="hljs-string">"Your booking will be confirmed shortly!"</span>,
+		<span class="hljs-string">"hotel"</span>: {
+			<span class="hljs-string">"confirmed"</span>: <span class="hljs-string">"Your hotel booking at [[hotel]] is confirmed!"</span>,
+			<span class="hljs-string">"to_confirm"</span>: <span class="hljs-string">"Your hotel booking will be confirmed shortly!"</span>
+		}
+	}
+} );</code></pre>
+
+	<h4 class="header sub-header" id="i18n.addExtendedTokens(tokens)">Override existing tokens</h4>
+	<p>
+		 Allow tokens to override old ones when needed, this is useful when adding different dialects variations to the same language.
+	</p>
+<pre><code class="lang-javascript">i18n.addExtendedTokens( {
+	<span class="hljs-string">"booking"</span>: 
+		<span class="hljs-string">"hotel"</span>: {
+			<span class="hljs-string">"confirmed"</span>: <span class="hljs-string">"Thy booking hath been confirm'd"</span>
+		}
+	}
+} );</code></pre>
+
+		<h3 class="header main-header">Translation</h3>
+		<p>
+		We support translation paths, interpolating dynamic values and translating text blobs such as html, xml or json.
+		</p>
+
+		<h4 class="header sub-header" id="i18n(path)">Translating paths</h4>
+		<p>
+			Tokens are stored in a json object to allow translations to be separated easily. You can navigate the object the same
+			way in javascript, using the dot notation.
+		</p>
+<pre><code class="lang-javascript">i18n( <span class="hljs-string">"booking.hotel.to_confirm"</span> );
+&gt; <span class="hljs-string">"Your hotel booking will be confirmed shortly!"</span></code></pre>
+
+		<h4 class="header sub-header" id="i18n(path, object)">Interpolation</h4>
+		<p>
+			You can interpolate values by passing in a key value pair object as a second argument.
+		</p>
+<pre><code class="lang-javascript">i18n( <span class="hljs-string">"booking.confirmed"</span>, {
+	<span class="hljs-string">"booking_number"</span>: <span class="hljs-string">"XF5943"</span>,
+	<span class="hljs-string">"day"</span>: <span class="hljs-string">"20/11/2016"</span>
+} );
+&gt; <span class="hljs-string">"Your booking no:XF5943 on 20/11/2016 was successfully confirmed!"</span></code></pre>
+
+		<h4 class="header sub-header" id="i18n.translate(text)">Translating Text</h4>
+		<p>
+			Templating client side HTML made easy. Just provide the loaded text to BabelBox and it will
+			replace all tokens with the correct value.
+		</p>
+<pre><code class="lang-javascript"><span class="hljs-keyword">var</span> template = i18n.translate( <span class="hljs-built_in">require</span>( <span class="hljs-string">"text!../html/template.txt"</span> ) );</code></pre>
+
+		<h4 class="header sub-header">Translation Trees</h4>
+
+<p>
+When your application gets bigger and more complicated, you want to make sure that generic translations don't get duplicated everywhere. But in the case a certain widget does need it's own translation, it doesn't suddenly complicate naming conventions.
+<br><br>
+Because of this, we have translation trees, where if your namespaced token doesn't exist, you'll go up the tree until a token is found.
+</p>
+
+<pre><code class="lang-javascript">i18n( <span class="hljs-string">"booking.sauna.to_confirm"</span> ); 
+&gt; <span class="hljs-string">"Your booking will be confirmed shortly!"</span></code></pre>
+
+<h3 class="header main-header">Error Handling</h3>
+
+<p>
+You have the option of getting errors via an emitter to allow custom control of unhappy scenarios.
+</p>
+
+<h4 class="header sub-header" id="emitter.setEmitter(emitter)">Setting an emitter</h4>
+<p>
+	Setting an EventEmitter allows errors to be handled rather than thrown
+</p>
+<pre><code class="lang-javascript">i18n.setEmitter( emitter );</code></pre>
+
+<h4 class="header sub-header" id="emitter.on('DUPLICATE_TOKEN',callback)">When token already exists</h4>
+<p>
+	Occurs when a token added via i18n.addToken already exists, use addExtendedToken if you want to override
+</p>
+<pre><code class="lang-javascript">emitter.on( <span class="hljs-string">"DUPLICATE_TOKEN"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> token </span>) </span>{
+	<span class="hljs-comment">//Custom Code</span>
+} );</code></pre>
+
+<h4 class="header sub-header" id="emitter.on('NAMESPACE_ALSO_VALUE',callback)">When tree conflicts occur</h4>
+<p>
+	Occurs when a part of a token added reaches a leaf in the tree and can't be added successfully
+</p>
+<pre><code class="lang-javascript">emitter.on( <span class="hljs-string">"NAMESPACE_ALSO_VALUE"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> token </span>) </span>{
+	<span class="hljs-comment">//Custom Code</span>
+} );</code></pre>
+
+<h3 class="header main-header">Config</h3>
+
+<p>
+Finally, you have the ability to configure most aspects of the BabelBox and BabelBox-requirejs to what suits you the best.
+</p>
+
+<h4 class="header sub-header" id="requirejs-config">Configuring requirejs plugin</h4>
+
+<p>
+	The requirejs plugin allows you to change what path BabelBox was registered with, the locale separator used in your i18n json
+	file convention and how specialised you want your sub-locales to be.
+</p>
+
+<pre><code class="lang-javascript">requirejs.config( {
+	paths: {
+		<span class="hljs-string">"BabelBox"</span>: <span class="hljs-string">"bower_components/BabelBox-requirejs/BabelBox"</span>,
+		<span class="hljs-string">"i18n"</span>: <span class="hljs-string">"bower_components/BabelBox/src/BabelBox"</span>
+	}, 
+	BabelBox: {
+		BabelBoxpath: <span class="hljs-string">"i18n"</span>,
+		localeseperator: <span class="hljs-string">"-"</span>,
+		localedepth: <span class="hljs-string">"2"</span>
+	}
+} );</code></pre>
+
+<h4 class="header sub-header" id="i18n.setConfig(config)">Configuring BabelBox</h4>
+
+<p>
+	BabelBox allows you to update the character used to separate tokens, the cookie name to store the user selected locale
+	and the url get parameter to specify the language to use.
+</p>
+
+
+<pre><code class="lang-javascript">i18n.setConfig( {
+	SPLIT_CHAR: <span class="hljs-string">"."</span>,
+	COOKIE_NAME: <span class="hljs-string">"BabelBox-locale"</span>,
+	URL_PARAM: <span class="hljs-string">"locale"</span>
+} );</code></pre>
+
+</div>
+</div>
+</div>
+
+<div id="footer">
+		<div class="copyright">
+			©2015 Hoxton One Ltd. All rights reserved.
+		</div>
+</div>
+
+<script type="text/javascript">
+	function onscroll() {
+		var top = (window.pageYOffset || document.scrollTop)  - (document.clientTop || 0);
+		 	if( top > 990 ) {
+		 		document.body.classList.add( 'view-docs' );
+		 	} else {
+		 		document.body.classList.remove( 'view-docs' );
+		 	}
+	}
+
+	 window.addEventListener("scroll", onscroll );
+	 onscroll();
+</script>
+
+			<script>
+				(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+				(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+				m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+				})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+				ga('create', 'UA-63583386-3', 'auto');
+				ga('send', 'pageview');
+			</script>
+
+
+
+
+</body></html>

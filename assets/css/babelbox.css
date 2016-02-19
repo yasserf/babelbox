@@ -1,0 +1,317 @@
+/****************************
+* GENERAL
+****************************/
+*{
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+  font-family: 'Roboto';
+  color: #777;
+  box-sizing: border-box;
+}
+
+html, body{
+	height: 100%;
+}
+
+
+body{
+  background-color: #fff;
+}
+
+
+
+/****************************
+* Ontology
+****************************/
+h3, h4 {
+    color: #333;
+    margin: 20px 0;
+}
+
+li, p {
+    margin: 5px 0;
+}
+
+pre {
+    padding: 8px 15px;
+    border-radius: 5px;
+    overflow-x: auto;
+    background: #f8f8f8;
+    border: 1px solid #e5e5e5;
+    margin: 0px 0 40px 0;
+}
+
+code, code > * {
+  font-family: monospace;
+}
+/****************************
+* HEADER
+****************************/
+
+.header-wrapper{
+  text-align: center;
+  overflow: hidden;
+  height: 300px;
+
+}
+
+.header-back{
+  position: absolute;
+  top: 0px;
+  text-align: center;
+
+  height: 250px;
+  width: 100%;
+  background-color: #333;
+
+}
+
+.header-svg{
+  text-align: center;
+  overflow: hidden;
+  height: 300px;
+  background: url(../images/babelbox-header.svg) no-repeat center top;
+}
+
+.bb-headline{
+  margin: 40px auto auto auto;
+  overflow: hidden;
+  height: 47px;
+  width: 370px;
+  background: url(../images/babelbox-logo.svg) no-repeat center top;
+  text-indent: -9999px;
+}
+
+.bb-subheading {
+  margin: auto auto 40px auto;
+	font-family: 'Quicksand', arial;
+	font-size: 40px;
+	font-weight: 500;
+	text-align: center;
+	color: #ccc;
+}
+
+.main-code-snippet {
+  background: white;
+}
+
+.main-content-wrapper {
+  padding: 0 50px 50px 50px;
+  margin: 50px 0 0 0;
+  position: relative;
+}
+
+.lip-shadow{
+  margin: auto;
+  height: 40px;
+  max-width: 640px;
+  background: url(../images/lip-shadow.svg) no-repeat center top;
+}
+
+#footer .copyright {
+    text-align: center;
+    font-size: 10px;
+    color: #AAA;
+    margin: 10px 0;
+}
+
+#doc-nav, .docs {
+  vertical-align: top;
+  display: inline-block;
+}
+
+#doc-nav {
+  overflow-y: auto;
+}
+
+#doc-nav li.head {
+    font-family: 'Roboto';
+    font-size: 14px;
+    color: #888;
+    border-bottom: 1px solid #CCC;
+    margin-top: 15px;
+    padding-right: 0;
+    margin-right: 10px;
+    width: 140px;
+    float: right;
+}
+
+#doc-nav li {
+    margin-bottom: 3px;
+    text-align: right;
+    border-right: 3px solid transparent;
+    padding-right: 10px;
+    position: relative;
+    clear: both;
+}
+
+#doc-nav li a {
+    font-family: 'Roboto';
+    font-size: 14px;
+    color: #202020;
+    text-decoration: none;
+}
+
+.cols-wrapper{
+  max-width: 960px;
+  min-height: 300px;
+  margin: auto;
+}
+
+.two-cols{
+  display: inline-block;
+  width: 478px;
+  height: 100px;
+  margin: 0px 0px 0px 0px;
+}
+
+.main-desc {
+  font-family: 'Quicksand', arial;
+  font-size: 20px;
+  font-weight: 500;
+  text-align: left;
+  color: #000;
+}
+
+.action-buttons {
+  margin: 20px 0;
+}
+
+.description {
+  margin-top: 40px;
+}
+
+.button-github, .button-bower {
+    text-decoration: initial;
+    font-family: 'Roboto';
+    border: 2px solid;
+    padding: 10px 10px 10px 40px;
+    background-color: white;
+    box-shadow: 0px 3px 3px rgba(0,0,0,0.2);
+    margin-right: 20px;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.button-github {
+    color: #da1b5b;
+    background: white url(../images/git.svg) no-repeat 0.2em 0.2em;
+}
+
+.button-bower {
+    color: #396afe;
+    background: white url(../images/bower.svg) no-repeat 0.2em 0.2em;
+}
+
+.column ul span {
+  font-family: 'Roboto';
+  color: #333;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 22px;
+}
+
+.column ul {
+  list-style-type: circle;
+  color: #FF0066;
+  text-align: left;
+  padding-left: 25px;
+}
+
+.column li {
+  list-style-type: circle;
+  color: red;
+  margin-bottom: 10px;
+
+}
+
+.intro-wrapper {
+  background-color: #D5E5EA;
+  padding-bottom: 50px;
+}
+
+@media (min-width: 1000px) {
+  .docs {
+    width: calc( 100% - 250px );
+    margin-left: 25px;
+  }
+  .main-content {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .view-docs #doc-nav {
+    position: fixed;
+    top: 20px;
+  }
+
+  .view-docs .docs {
+    margin-left: 190px;
+}
+
+}
+
+@media (max-width: 999px) {
+  #doc-nav {
+    display: none;
+  }
+  .main-content, .docs {
+    width: 100%;
+  }
+  .button-bower {
+    margin-top: 10px;
+  }
+  .button-bower, .button-github {
+    width: 200px;
+  }
+}
+
+/**
+* Scaffold 
+**/
+
+/**
+* Columns
+*/
+.two-columns .column,
+.squeeze-two-columns .column {
+  vertical-align: top;
+}
+.one-column {
+  padding: 50px;
+}
+@media (max-width: 999px) {
+  .two-columns .column {
+    margin: 50px auto;
+    width: 70%;
+  }
+}
+/**
+ *  Section
+ */
+.section {
+  margin: auto;
+  position: relative;
+}
+@media (max-width: 999px) {
+  .section {
+    width: 100%;
+  }
+}
+
+@media (min-width: 1000px) {
+  .two-columns .column {
+    padding: 0 50px;
+    display: inline-block;
+  }
+  .two-columns .column:first-child {
+    padding-left: 50px;
+  }
+  .two-columns .column {
+    width: 498px;
+  }
+  .section {
+    width: 1000px;
+  }
+}
