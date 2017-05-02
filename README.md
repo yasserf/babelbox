@@ -1,6 +1,8 @@
 # babelbox ![Build](https://travis-ci.org/hoxton-one/babelbox.svg?branch=master)[![Bower version](https://badge.fury.io/bo/babelbox.svg)](https://badge.fury.io/bo/babelbox)
 =======================
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/deepstreamIO/babelbox.svg)](https://greenkeeper.io/)
+
 babelbox is a small i18n library that allows users to easily create apps that support multiple languages.
 
 Featuring:
