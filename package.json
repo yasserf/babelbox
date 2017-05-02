@@ -22,16 +22,16 @@
   },
   "homepage": "https://github.com/yasserf/babelbox#readme",
   "devDependencies": {
-    "grunt": "^0.4.5",
-    "grunt-contrib-copy": "^0.8.2",
-    "grunt-contrib-uglify": "^0.10.0",
-    "grunt-karma": "^0.12.1",
-    "grunt-release": "^0.13.0",
+    "grunt": "^1.0.1",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-uglify": "^2.3.0",
+    "grunt-karma": "^2.0.0",
+    "grunt-release": "^0.14.0",
     "jasmine-core": "^2.3.4",
-    "karma": "^0.13.15",
-    "karma-chrome-launcher": "^0.2.1",
-    "karma-firefox-launcher": "^0.1.6",
-    "karma-jasmine": "^0.3.6"
+    "karma": "^1.6.0",
+    "karma-chrome-launcher": "^2.0.0",
+    "karma-firefox-launcher": "^1.0.1",
+    "karma-jasmine": "^1.1.0"
   },
   "dependencies": {}
 }
